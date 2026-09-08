@@ -54,7 +54,7 @@ export default function Search(){
         Year: movie.release_date ? movie.release_date.split('-')[0] : 'N/A',
         Plot: movie.overview || "No overview available.",
         Poster: movie.poster_path
-          ? `https://image.tmdb.org/tbs/p/w500${movie.poster_path}` 
+          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` 
           : "https://via.placeholder.com/300x450?text=No+Poster"
       }));
 
