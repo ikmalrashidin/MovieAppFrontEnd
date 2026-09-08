@@ -37,7 +37,7 @@ export default function Search(){
     try {
       // 1. Fetch search results from TMDB
       const res = await fetch(
-        `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}&include_adult=false&language=en-US&page=1`,
+        `https://v3-cinemeta.strem.io/catalog/series/top/search=${encodeURIComponent(query)}.json`,
         OPTIONS
       );
 
@@ -48,14 +48,12 @@ export default function Search(){
       const data = await res.json();
 
       // 2. Transform TMDB data to match the property names expected by <MovieCard />
-      const formattedMovies = data.results.map((movie) => ({
-        imdbID: movie.id,
-        Title: movie.title,
-        Year: movie.release_date ? movie.release_date.split('-')[0] : 'N/A',
-        Plot: movie.overview || "No overview available.",
-        Poster: movie.poster_path
-          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` 
-          : "https://via.placeholder.com/300x450?text=No+Poster"
+      const formattedMovies = (data.metas || []).map((movie) => ({
+        imdbID: movie.imdb_id || movie.id,
+        Title: movie.name,
+        Year: movie.releaseInfo || 'N/A',
+        Plot: `Type: ${movie.type || 'Series'}`, //Cinema search results do not include full plots
+        Poster: movie.poster || "https://via.placeholder.com/300x450?text=No+Poster"
       }));
 
       setMovies(formattedMovies);
